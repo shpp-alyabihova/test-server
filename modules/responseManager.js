@@ -25,15 +25,9 @@ class ResponseManager {
             });
     }
 
-    sendResponse(code, message, data) {
-        let _this = this;
-        _this.response.statusMessage = message;
-        _this.response.statusCode = code;
-        _this.response.writeHead(code, {
-            "Content-Type": "application/json"
-        });
-        _this.response.end(JSON.stringify(data));
-    }
+   tetst(req, res) {
+        
+   }
 
 }
 
