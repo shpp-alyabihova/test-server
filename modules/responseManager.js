@@ -25,35 +25,6 @@ class ResponseManager {
             });
     }
 
-    createWritableStream(resFile) {
-        let _this = this;
-        fs.stat(resFile.path, (err, stats)=> {
-            if (err || !stats.isFile() || stats.size == 0) {
-                let data = (err) ? err.toString() : 'no content';
-                _this.sendResponse(204, 'no content', { "data": data });
-            } else {
-                let file = new fs.ReadStream(resFile.path);
-
-                file.pipe(_this.response);
-                file
-                    .on('error', (err)=> {
-                        _this.sendResponse(500, 'internal server error', { "error": err.toString() });
-                    })
-                    .on('close', ()=> {
-                        _this.response.writeHead(200, {
-                            "Content-Type": resFile.contentType,
-                            "Content-Length": stats.size
-                        });
-                    });
-                _this.response
-                    .on('close', ()=> {
-                        file.destroy();
-                    });
-
-            }
-        });
-    }
-
     sendResponse(code, message, data) {
         let _this = this;
         _this.response.statusMessage = message;
